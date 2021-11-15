@@ -7,6 +7,7 @@ const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
+var cors = require('cors')
 dotenv.config();
 mongooes
   .connect(process.env.MOGOOSE_URL)
@@ -14,6 +15,9 @@ mongooes
   .catch((err) => console.log(err));
 
 const app = express();
+
+app.use(cors());
+
 app.use(bodyParser.json());
 
 app.use("/api/users", userRoute);
