@@ -1,36 +1,40 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const verifyToken = (req,res,next)=>{
+const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     // console.log(req.headers);
-    if(authHeader){
-        const token = authHeader.split(" ")[1]
-        jwt.verify(token,process.env.TOKEN_SEC,(err,user)=>{
-            if(err) res.status(403).json("Token is not valid!")
+    if (authHeader) {
+        const token = authHeader.split(' ')[1];
+        jwt.verify(token, process.env.TOKEN_SEC, (err, user) => {
+            if (err) res.status(403).json('Token is not valid!');
             req.user = user;
-            next()
-        })
-    }else{
-        return res.status(401).json("You are not authencated!")
+            next();
+        });
+    } else {
+        return res.status(401).json('You are not authencated!');
     }
-}
-const verifyTOkenAndAuthorization =(req,res,next)=>{
-    verifyToken(req,res,()=>{
-        if(req.user.id === req.params.id || req.user.isAdmin ){
+};
+const verifyTOkenAndAuthorization = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user.id === req.params.id || req.user.isAdmin) {
             next();
-        }else{
-            res.status(403).json("You are not aleowed to do that!");
+        } else {
+            res.status(403).json('You are not aleowed to do that!');
         }
-    })
-}
-const verifyTOkenAndAdmin =(req,res,next)=>{
-    verifyToken(req,res,()=>{
-        if(req.user.isAdmin ){
+    });
+};
+const verifyTOkenAndAdmin = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user.isAdmin) {
             next();
-        }else{
-            res.status(403).json("You are not aleowed to do that!");
+        } else {
+            res.status(403).json('You are not aleowed to do that!');
         }
-    })
-}
+    });
+};
 
-module.exports = {verifyToken,verifyTOkenAndAuthorization,verifyTOkenAndAdmin};
+module.exports = {
+    verifyToken,
+    verifyTOkenAndAuthorization,
+    verifyTOkenAndAdmin,
+};
